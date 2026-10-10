@@ -13,6 +13,8 @@
 #include <string>
 #include <cctype>
 #include <cmath>
+#include <limits>
+#include <stdexcept>
 
 #include "symbol.h"
 #include "error_handler.h"
@@ -508,14 +510,141 @@ void scanner::scan_alpha()
 
 void scanner::scan_digit()
 {
-	// scan in a token beginning with a digit
-	// Note that a unary operator such as -1 would be detected as a minus sign followed by a digit.
+	// Number syntax: digits [ '.' digits ] [ ('E' | 'e') [ '+' | '-' ] digits ].
+	// A decimal point makes a real; an exponent alone does not make an integer real.
+	// A leading + or - is scanned separately by scan_special_symbol().
+	string number_text;
+	string integer_digits;
+	bool is_real = false;
+	bool negative_exponent = false;
+	bool malformed = false;
+	int exponent = 0;
+	const int max_integer = numeric_limits<int>::max();
+	current_integer_value = 0;
+	current_real_value = 0.0f;
 
-    	// TO BE COMPLETED BEFORE THE SCANNER FUNCTIONS PROPERLY AND THE
-    	// PARSER CAN BE STARTED.
+	// 1. Read the whole-number part. get_char() leaves a line delimiter at EOL,
+	// so digits on different source lines cannot join into one number.
+	while (next_char >= '0' && next_char <= '9')
+	{
+		integer_digits += next_char;
+		number_text += next_char;
+		get_char();
+	}
 
-	// INSERT CODE HERE.
+	// 2. Read an optional fraction, leaving both dots of a range untouched.
+	if (next_char == '.' && following_char() != '.')
+	{
+		is_real = true;
+		number_text += next_char;
+		get_char();
+		if (next_char < '0' || next_char > '9')
+		{
+			error->flag(current_line_number, current_pos_on_line, 63);
+			malformed = true;
+		}
+		while (next_char >= '0' && next_char <= '9')
+		{
+			number_text += next_char;
+			get_char();
+		}
+	}
 
+	// 3. Read an optional exponent. Consume all its digits even after overflow,
+	// so a malformed number does not trap the scanner or become several tokens.
+	if (next_char == 'E' || next_char == 'e')
+	{
+		number_text += next_char;
+		get_char();
+		if (next_char == '+' || next_char == '-')
+		{
+			negative_exponent = (next_char == '-');
+			number_text += next_char;
+			get_char();
+		}
+		if (next_char < '0' || next_char > '9')
+		{
+			error->flag(current_line_number, current_pos_on_line, 64);
+			malformed = true;
+		}
+		bool exponent_overflow = false;
+		while (next_char >= '0' && next_char <= '9')
+		{
+			int digit = next_char - '0';
+			// No course-specific exponent digit limit is supplied in the starter.
+			// Check the storage limit before arithmetic to avoid signed overflow.
+			if (!exponent_overflow)
+			{
+				if (exponent > (max_integer - digit) / 10)
+					exponent_overflow = true;
+				else
+					exponent = exponent * 10 + digit;
+			}
+			number_text += next_char;
+			get_char();
+		}
+		if (exponent_overflow)
+		{
+			error->flag(current_line_number, current_pos_on_line, 65);
+			malformed = true;
+		}
+		if (!is_real && negative_exponent)
+		{
+			error->flag(current_line_number, current_pos_on_line, 67);
+			malformed = true;
+		}
+	}
+
+	// Keep a numeric token with a safe zero value after an error. In particular,
+	// never leave end_of_program as the token type: that would stop scanning early.
+	current_symbol = new symbol(is_real ? symbol::real_num : symbol::integer);
+	if (malformed)
+		return;
+
+	// 4. Convert only after validating syntax. stof checks the float range.
+	if (is_real)
+	{
+		try
+		{
+			current_real_value = stof(number_text);
+		}
+		catch (const invalid_argument&)
+		{
+			error->flag(current_line_number, current_pos_on_line, 66);
+		}
+		catch (const out_of_range&)
+		{
+			error->flag(current_line_number, current_pos_on_line, 66);
+		}
+	}
+	else
+	{
+		// Integer conversion stays exact: check before each multiply/add rather
+		// than converting through floating point and risking rounding or overflow.
+		int value = 0;
+		for (char digit_char : integer_digits)
+		{
+			int digit = digit_char - '0';
+			if (value > (max_integer - digit) / 10)
+			{
+				error->flag(current_line_number, current_pos_on_line, 68);
+				return;
+			}
+			value = value * 10 + digit;
+		}
+		// Zero remains zero for any nonnegative exponent. For nonzero values,
+		// overflow is detected in a few iterations even if the exponent is huge.
+		for (int i = 0; value != 0 && i < exponent; ++i)
+		{
+			if (value > max_integer / 10)
+			{
+				error->flag(current_line_number, current_pos_on_line, 68);
+				return;
+			}
+			value *= 10;
+		}
+		current_integer_value = value;
+	}
 }
 
 
