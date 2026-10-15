@@ -394,15 +394,37 @@ token* scanner::get_token()
 
 void scanner::scan_string()
 {
-    	// Process a string. Need to ensure that a string begins and ends with a
-    	// double quote and that the string is wholly contained on a single line in
-    	// the source file. 2 adjacent double quote marks are interpreted as a single
-    	// double quote character within the string.
-    
-    	// TO BE COMPLETED BEFORE THE SCANNER FUNCTIONS PROPERLY AND THE
-    	// PARSER CAN BE STARTED.
+	// The opening quote is next_char. Reset the value for every new string,
+	// including empty strings, so a previous token's contents cannot carry over.
+	current_symbol = new symbol(symbol::strng);
+	current_string_value = "";
+	get_char();
 
-	// INSERT CODE HERE.
+	// get_char() sets eoln_flag when it reaches the end of the source line.
+	// Never continue onto the next line while looking for a closing quote.
+	while (!eoln_flag && !eof_flag)
+	{
+		if (next_char == '"')
+		{
+			if (following_char() != '"')
+				return; // Leave the closing quote for scan_special_symbol() to consume.
+
+			// Two quotes inside a string represent one literal quote.
+			current_string_value += '"';
+			get_char(); // Move onto the second quote of the pair.
+			get_char(); // Continue after the pair.
+		}
+		else
+		{
+			// Spaces, operators and comment markers are ordinary string contents.
+			current_string_value += next_char;
+			get_char();
+		}
+	}
+
+	// Report at the opening quote. Return a string token with the partial value
+	// so scanning can continue; the caller advances past the line delimiter.
+	error->flag(current_line_number, current_pos_on_line, 60);
 }
 
 
