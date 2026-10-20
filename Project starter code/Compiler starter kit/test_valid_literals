@@ -1,0 +1,14 @@
+program test is
+    x : integer;
+    y : real;
+begin
+    x := 123;
+    y := 45.67;
+    x := 12E+3;
+    y := 1.5e-2;
+    writeln("Hello Lille");
+    writeln("She said ""Hello""");
+    for i in 1..10 loop
+        writeln(i);
+    end loop;
+end test;

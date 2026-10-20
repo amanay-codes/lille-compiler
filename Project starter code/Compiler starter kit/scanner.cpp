@@ -405,15 +405,21 @@ void scanner::scan_string()
 	while (!eoln_flag && !eof_flag)
 	{
 		if (next_char == '"')
-		{
-			if (following_char() != '"')
-				return; // Leave the closing quote for scan_special_symbol() to consume.
+{
+    if (following_char() != '"')
+    {
+        // An empty string is not allowed in Lille.
+        if (current_string_value.empty())
+            error->flag(current_line_number, current_pos_on_line, 124);
 
-			// Two quotes inside a string represent one literal quote.
-			current_string_value += '"';
-			get_char(); // Move onto the second quote of the pair.
-			get_char(); // Continue after the pair.
-		}
+        return; // Leave the closing quote for scan_special_symbol() to consume.
+    }
+
+    // Two quotes inside a string represent one literal quote.
+    current_string_value += '"';
+    get_char(); // Move onto the second quote of the pair.
+    get_char(); // Continue after the pair.
+}
 		else
 		{
 			// Spaces, operators and comment markers are ordinary string contents.
