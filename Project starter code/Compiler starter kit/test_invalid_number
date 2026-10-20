@@ -1,0 +1,4 @@
+program test is
+begin
+    writeln(12E+);
+end test;
