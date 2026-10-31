@@ -1,0 +1,8 @@
+program test is
+begin
+    if true then
+        writeln("Condition is true");
+    else
+        writeln("Condition is false");
+    end if;
+end;

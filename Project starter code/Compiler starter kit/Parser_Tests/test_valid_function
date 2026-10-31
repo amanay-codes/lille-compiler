@@ -1,0 +1,8 @@
+program test is
+    function get_number return integer is
+    begin
+        return 42;
+    end get_number;
+begin
+    writeln(get_number);
+end;

@@ -1,0 +1,8 @@
+program test is
+    procedure greet is
+    begin
+        writeln("Hello!");
+    end greet;
+begin
+    greet;
+end;

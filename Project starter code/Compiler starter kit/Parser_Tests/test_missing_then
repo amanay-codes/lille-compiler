@@ -1,0 +1,6 @@
+program test is
+begin
+    if true
+        null;
+    end if;
+end;

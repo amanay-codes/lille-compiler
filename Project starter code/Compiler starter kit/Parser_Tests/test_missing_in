@@ -1,0 +1,6 @@
+program test is
+begin
+    for i 1..5 loop
+        writeln(i);
+    end loop;
+end;
