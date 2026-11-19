@@ -1,0 +1,6 @@
+program duplicate is
+ x: integer;
+ x: real;
+begin
+ null;
+end duplicate;

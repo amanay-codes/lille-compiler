@@ -1,0 +1,9 @@
+program funcs is
+  x: integer;
+  function double(n: value integer) return integer is
+  begin
+    return n + n;
+  end double;
+begin
+  x := double(4);
+end funcs;

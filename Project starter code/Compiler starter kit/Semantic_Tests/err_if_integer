@@ -1,0 +1,7 @@
+program condition is
+ x: integer;
+begin
+ if x then
+   null;
+ end if;
+end condition;

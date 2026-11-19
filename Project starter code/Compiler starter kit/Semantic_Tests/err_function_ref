@@ -1,0 +1,8 @@
+program badfunc is
+ function f(n: ref integer) return integer is
+ begin
+  return n;
+ end f;
+begin
+ null;
+end badfunc;

@@ -1,0 +1,7 @@
+program wrong is
+ x: integer;
+ y: real;
+begin
+ y := 2.5;
+ x := y;
+end wrong;

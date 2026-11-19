@@ -1,0 +1,5 @@
+program vinit is
+ x: integer := 5;
+begin
+ null;
+end vinit;

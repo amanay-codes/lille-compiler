@@ -1,0 +1,5 @@
+program example is
+ x: integer;
+begin
+ x := missing + 2;
+end example;

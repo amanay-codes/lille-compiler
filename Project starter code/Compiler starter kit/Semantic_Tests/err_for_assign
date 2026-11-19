@@ -1,0 +1,6 @@
+program forassign is
+begin
+ for i in 1..5 loop
+   i := 2;
+ end loop;
+end forassign;

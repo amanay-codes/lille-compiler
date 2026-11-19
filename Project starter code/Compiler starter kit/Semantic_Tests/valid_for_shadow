@@ -1,0 +1,9 @@
+program shadow is
+  i: integer;
+begin
+  i := 8;
+  for i in 1..3 loop
+    write(i);
+  end loop;
+  i := 9;
+end shadow;

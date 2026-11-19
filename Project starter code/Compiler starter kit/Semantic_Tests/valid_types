@@ -1,0 +1,12 @@
+program types is
+ x: integer;
+ y: real;
+ s: string;
+ b: boolean;
+begin
+ x := 2 ** 3;
+ y := x + 2.5;
+ s := "Hi" & "!";
+ b := x > 1;
+ b := b and true;
+end types;

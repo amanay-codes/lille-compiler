@@ -1,0 +1,4 @@
+program badexit is
+begin
+ exit;
+end badexit;

@@ -1,0 +1,8 @@
+program no_return is
+ function f(n: value integer) return integer is
+ begin
+  null;
+ end f;
+begin
+ null;
+end no_return;

@@ -1,0 +1,6 @@
+program bounds is
+begin
+ for i in 1.5..5.5 loop
+   null;
+ end loop;
+end bounds;

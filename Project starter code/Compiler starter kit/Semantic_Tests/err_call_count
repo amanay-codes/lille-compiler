@@ -1,0 +1,8 @@
+program callcount is
+ procedure add(n: value integer; m: value integer) is
+ begin
+  null;
+ end add;
+begin
+ add(2);
+end callcount;

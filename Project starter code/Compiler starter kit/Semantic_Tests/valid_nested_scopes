@@ -1,0 +1,18 @@
+program nested is
+  a: integer;
+  procedure outer(x: value integer) is
+    b: real;
+    procedure inner(y: value integer) is
+      c: boolean;
+    begin
+      c := y > 0;
+      b := x + y;
+    end inner;
+  begin
+    b := a;
+    inner(3);
+  end outer;
+begin
+  a := 4;
+  outer(a);
+end nested;

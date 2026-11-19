@@ -1,0 +1,10 @@
+program reference is
+  x: integer;
+  procedure change(a: ref integer) is
+  begin
+    a := a + 1;
+  end change;
+begin
+  x := 5;
+  change(x);
+end reference;

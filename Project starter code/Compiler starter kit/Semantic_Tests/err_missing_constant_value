@@ -1,0 +1,5 @@
+program cmissing is
+ limit: constant integer;
+begin
+ null;
+end cmissing;

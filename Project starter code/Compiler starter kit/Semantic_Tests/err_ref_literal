@@ -1,0 +1,8 @@
+program badref is
+ procedure change(n: ref integer) is
+ begin
+  n := 2;
+ end change;
+begin
+ change(5);
+end badref;

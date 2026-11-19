@@ -1,0 +1,7 @@
+program widen is
+  x: integer;
+  y: real;
+begin
+  x := 3;
+  y := x;
+end widen;

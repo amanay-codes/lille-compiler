@@ -1,0 +1,5 @@
+program constanttest is
+ limit: constant integer := 5;
+begin
+ limit := 7;
+end constanttest;
