@@ -1,3 +1,5 @@
+/* Reda Benhaimoud | CSC-4510 | Integration: construct symbol table and run semantic parser.
+ * Original professor starter-code copyright and authorship follow. */
  /*************************************************************************************************
  *
  * lille Compiler
@@ -44,7 +46,7 @@
 #include "symbol.h"
 #include "error_handler.h"
 //#include "code_gen.h"
-//#include "id_table.h"
+#include "id_table.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -201,11 +203,12 @@ bool process_command_line(int argc, char *argv[]) {
 				err = new error_handler(source_filename, listing_filename);
 
             // Initialize the scanner for the source program.
+            id_tab = new id_table(err);
             scan = new scanner(source_filename, id_tab, err);
 
             // Run the recursive-descent parser.
             // The parser checks the Lille grammar and reports syntax errors.
-            parser syntax_parser(scan, err);
+            parser syntax_parser(scan, err, id_tab);
             syntax_parser.parse();
 
 

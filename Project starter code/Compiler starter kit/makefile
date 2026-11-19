@@ -1,31 +1,27 @@
-all: compiler.o error_handler.o lille_exception.o scanner.o parser.o id_table.o symbol.o token.o
-		g++ -o compiler compiler.o error_handler.o lille_exception.o scanner.o parser.o id_table.o symbol.o token.o
-	echo Compilation complete.
+# Reda Benhaimoud | CSC-4510 | Build semantic analyzer and array-of-BST symbol table.
+CXX = g++
+CXXFLAGS = -std=c++20 -Wall -Wextra
+OBJS = compiler.o error_handler.o lille_exception.o scanner.o parser.o id_table.o symbol.o token.o
 
-compiler.o: id_table.o error_handler.o lille_exception.o scanner.o symbol.o compiler.cpp parser.h
-	g++ -std=c++20 -c compiler.cpp
+all: compiler
+	@echo Compilation complete.
 
-parser.o: parser.cpp parser.h scanner.h error_handler.h
-	g++ -std=c++20 -c parser.cpp
+compiler: $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJS)
 
-error_handler.o: lille_exception.o token.o error_handler.h error_handler.cpp
-	g++ -std=c++20 -c error_handler.cpp
+compiler.o: compiler.cpp parser.h scanner.h id_table.h
+parser.o: parser.cpp parser.h id_table.h scanner.h
+id_table.o: id_table.cpp id_table.h
+scanner.o: scanner.cpp scanner.h
+error_handler.o: error_handler.cpp error_handler.h
+lille_exception.o: lille_exception.cpp lille_exception.h
+symbol.o: symbol.cpp symbol.h
+token.o: token.cpp token.h
 
-id_table.o:: id_table.h id_table.cpp
-	g++ -std=c++20 -c id_table.cpp
-
-lille_exception.o:	lille_exception.h lille_exception.cpp
-	g++ -std=c++20 -c lille_exception.cpp
-
-scanner.o: error_handler.o lille_exception.o token.o symbol.o id_table.o scanner.h scanner.cpp
-	g++ -std=c++20 -c scanner.cpp
-
-symbol.o: symbol.h symbol.cpp
-	g++ -std=c++20 -c symbol.cpp
-
-token.o: lille_exception.o symbol.o token.h token.cpp
-	g++ -std=c++20 -c token.cpp
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm *.o 
-	echo Clean complete
+	rm -f $(OBJS) compiler
+
+.PHONY: all clean
