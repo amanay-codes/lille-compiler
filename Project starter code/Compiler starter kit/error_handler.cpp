@@ -1,3 +1,4 @@
+// Reda Benhaimoud | CSC-4510 | Warning cleanup: remove unused locals from the unimplemented listing stub.
 /*
  * error_handler.cpp
  *
@@ -291,24 +292,13 @@ void error_handler::set_error_limit(int i)
 
 
 void error_handler::generate_listing()
-// generate a listing file.
+// Generate a listing file when that feature is implemented in a future phase.
+// This starter-code function is not used for semantic analysis.
 {
-	error_list* error_this_line;
-	int line_number {1};
-	int err_count = 0;
-	string source_line;
-	const int no_width = 4;
-	const int space = 1;
-	bool enter_loop {false};
-
-	if (listing_required)
-	{
-		// GENERATE THE LISTING FILE.
-
-		// INSERT CODE HERE.
-		
-	}
-	// else do nothing since no listing file name was provided.
+    if (listing_required)
+    {
+        // Listing generation is not implemented in the starter code.
+    }
 }
 
 

@@ -1,3 +1,4 @@
+// Reda Benhaimoud | CSC-4510 | Warning cleanup: make length comparisons use a consistent integer type.
 /*
  * scanner.cpp
  *
@@ -260,7 +261,7 @@ void scanner::get_char()
 {
 	// gets the next character from the input stream. Checks for end of line and end of file.
 
-	if ((pos_on_line + 1) < input_buffer.length())
+	if ((pos_on_line + 1) < static_cast<int>(input_buffer.length()))
 	{
 		pos_on_line++;
 		next_char = input_buffer.at(pos_on_line);
@@ -275,7 +276,7 @@ char scanner::following_char()
 {
 	// return the character after next_char;
 	//if (pos_on_line < (input_buffer.length()-1))
-	if ((!eof_flag) and ((pos_on_line + 1) < input_buffer.length()))
+	if ((!eof_flag) and ((pos_on_line + 1) < static_cast<int>(input_buffer.length())))
 		return input_buffer.at(pos_on_line + 1);
 	else
 		return end_marker;;

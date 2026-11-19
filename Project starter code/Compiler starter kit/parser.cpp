@@ -1,3 +1,4 @@
+// Reda Benhaimoud | CSC-4510 | Warning cleanup: clarify the exponentiation type-check conditional.
 /* Reda Benhaimoud | CSC-4510 | Semantic-analysis extension of the working
  * LL(1) Lille parser: scope-aware declarations, type checks, and call validation.
  * Existing scanner and professor-supplied diagnostic codes are reused. */
@@ -322,7 +323,10 @@ parser::T parser::factor() {
     }
     T left=primary();
     if(have(S::power_sym)){token at=current();must_be(S::power_sym);T right=primary();
-        if(!numeric(left)||right!=T::integer)semantic_error(119,&at);plain_identifier=false;}
+        if (!numeric(left) || right != T::integer) {
+            semantic_error(119, &at);
+        }
+        plain_identifier = false;}
     return left;
 }
 parser::T parser::primary() {
